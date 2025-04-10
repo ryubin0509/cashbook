@@ -45,7 +45,7 @@
           <a class="nav-link active" href="#">홈</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">통계</a>
+          <a class="nav-link" href="/cashbook/categoryList.jsp">카테고리 목록</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/cashbook/updateAdminPwForm.jsp">비밀번호 수정</a>
