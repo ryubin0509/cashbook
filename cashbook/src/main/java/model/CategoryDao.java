@@ -152,4 +152,25 @@ public class CategoryDao {
 		
 		conn.close();
 	}
+	
+	public ArrayList<Category> selectCategoryListByKind(String kind) throws ClassNotFoundException , SQLException{
+		ArrayList<Category> list = new ArrayList<>();
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/cashbook", "root", "java1234");
+		ResultSet rs = null; 
+		String sql = "select category_no categoryNo, title from category where kind = ? " ;
+		stmt = conn.prepareStatement(sql);
+		stmt.setString(1, kind);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			Category c = new Category();
+			c.setNum(rs.getInt("categoryNo"));
+			c.setTitle(rs.getString("title"));
+			
+			list.add(c);
+		}
+		return list;  
+	}
 }
