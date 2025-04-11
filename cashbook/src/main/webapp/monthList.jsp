@@ -116,10 +116,13 @@
                         ArrayList<HashMap<String,Object>> list  =  cashDao.selectCashList(cashDateStr);
                 %>
                     <td>
+                    	<a href="/cashbook/dateList.jsp?cashDate=<%=cashDateStr%>">
                         <span class="date"><%=date%></span>
+                        
                         <% for(HashMap<String,Object> map: list ){ %>
                             <div style="color: <%=map.get("color") %>"><%=map.get("kind")%> - <%=map.get("title") %> </div>
                         <% } %>
+                        </a>
                     </td>
                 <% } else { %>
                     <td class="empty">
