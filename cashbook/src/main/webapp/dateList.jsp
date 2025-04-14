@@ -78,6 +78,9 @@
                     <th>제목</th>
                     <th>금액</th>
                     <th>메모</th>
+                    <th>수정</th>
+                    <th>삭제 </th>
+                    <th>상세보기 </th>
                 </tr>
             </thead>
             <tbody>
@@ -87,11 +90,30 @@
                     <td><%=map.get("title") %></td>
                     <td><%=map.get("amount") %></td>
                     <td><%=map.get("memo") %></td>
+                    <td><a href="/cashbook/updateCashForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">수정</a></td>
+                    <td><a href="/cashbook/deleteCashAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">삭제</a></td>
+                    <td><a href="/cashbook/insertReceitForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 등록하기</a></td>
                 </tr>
                 <% } %>
             </tbody>
         </table>
+        
+        <% 
+			 int cashNum  = 0; 
+             if ( request.getParameter("cashNo")!= null){
+            	cashNum =  Integer.valueOf(request.getParameter("cashNo"));
+             }
+        	 ReceitDao receitDao = new ReceitDao();
+        	 Receit receit =  receitDao.selectReceitOne(cashNum);
+        %>
     </div>
 </div>
+  <% if (receit == null) { %>
+  <p>영수증이 등록되지 않았습니다. </p>
+  
+  <%   } else { %>
+	<div>이미지: <img src="/cashbook/upload/<%=receit.getFileName()%>"></div>
+
+	<% } %>
 </body>
 </html>
