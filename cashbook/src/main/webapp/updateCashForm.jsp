@@ -2,6 +2,14 @@
 <%@ page import = "dto.*" %>
 <%@ page import = "model.*" %>
 <%@ page import = "java.util.*" %>
+
+<% 
+    if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
+        response.sendRedirect("/cashbook/logout.jsp");
+        return; 
+    }
+%>
+
 <%
 	int cashNo = Integer.valueOf(request.getParameter("cashNo")); 
     CashDao cashDao = new CashDao();
@@ -13,6 +21,7 @@
 		 list2 = categoryDao.selectCategoryListByKind(kind);
 	}
     
+	System.out.println("list2:"+ list2);
 %>
 
 <!DOCTYPE html>
@@ -72,15 +81,21 @@
                 <label class="form-label">카테고리</label>
                 <select class="form-select" name="categoryNo" >
                 <% 
-                		if(list2 != null ){
+                		if(list2 !=  null  ){   
                 		for(Category c : list2){
+                		 	
                 %>
+                
+                	
+                     
                 	<option value="<%=c.getNum()%>"  selected><%=c.getTitle()%></option>
 	<%
                 }
             }
              %>
+             	<% if(list2== null  ||  list2.isEmpty()){ %>
 				<option value="<%=map.get("categoryNo")%>"  selected><%=map.get("title")%></option>
+				<% } %>
                 </select>
             </div>
             <div class="mb-3">

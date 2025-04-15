@@ -1,16 +1,17 @@
+<%@page import="jakarta.security.auth.message.callback.PrivateKeyCallback.IssuerSerialNumRequest"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import ="dto.*" %>
 <%@ page import ="model.*" %>
 <%@ page import = "java.util.*" %>
 <%
-	if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-	    response.sendRedirect("/cashbook/logout.jsp");
-	    return; 
-	}
+    if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
+        response.sendRedirect("/cashbook/logout.jsp");
+        return; 
+    }
 
-	String cashDate = request.getParameter("cashDate");
-	CashDao cashDao = new CashDao();
-	ArrayList<HashMap<String,Object>> list = cashDao.selectDateList(cashDate);
+    String cashDate = request.getParameter("cashDate");
+    CashDao cashDao = new CashDao();
+    ArrayList<HashMap<String,Object>> list = cashDao.selectDateList(cashDate);
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -38,6 +39,10 @@
             align-items: center;
             margin-bottom: 1rem;
         }
+        .image-section {
+            margin-top: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -51,7 +56,7 @@
           <a class="nav-link <%=request.getRequestURI().contains("index.jsp") ? "active" : ""%>" href="/cashbook/index.jsp">홈</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%=request.getRequestURI().contains("categoryList") ? "active" : ""%>" href="/cashbook/categoryList.jsp">카테고리 목록</a>
+          <a class="nav-link <%=request.getRequestURI().contains("categoryList") ? "active" : ""%>" href="/cashbook/monthList.jsp">달력 목록</a>
         </li>
         <li class="nav-item">
           <a class="nav-link <%=request.getRequestURI().contains("updateAdminPwForm") ? "active" : ""%>" href="/cashbook/updateAdminPwForm.jsp">비밀번호 수정</a>
@@ -81,10 +86,18 @@
                     <th>수정</th>
                     <th>삭제 </th>
                     <th>상세보기 </th>
+                    <th>영수증 등록 여부</th>
                 </tr>
             </thead>
             <tbody>
-                <% for(HashMap<String,Object> map : list ){ %>
+                <% for(HashMap<String,Object> map : list ){ 
+                    // cashNo를 각 항목마다 가져오기
+                    int cashNum = (int) map.get("cashNo");
+                    System.out.println("cashNum: " + cashNum);
+                    ReceitDao receitDao = new ReceitDao();
+                    Receit receit = receitDao.selectReceitOne(cashNum);
+                    String fileName = receit != null ? receit.getFileName() : "";
+                %>
                 <tr>
                     <td><%=map.get("kind") %></td>
                     <td><%=map.get("title") %></td>
@@ -93,27 +106,32 @@
                     <td><a href="/cashbook/updateCashForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">수정</a></td>
                     <td><a href="/cashbook/deleteCashAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">삭제</a></td>
                     <td><a href="/cashbook/insertReceitForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 등록하기</a></td>
+                    <td> <% if(fileName != null) {    %> ✅
+                    <% } else { %>
+                        ❌
+                    <% }  %>
+                     			</td>
                 </tr>
-                <% } %>
+             
+                    <tr> 
+                    	<% if(fileName != null ){%>
+                        <td colspan="6">
+                            <div class="image-section">
+                              
+                                <img src="/cashbook/upload/<%= fileName %>" class="img-fluid" alt="영수증 이미지">
+                             
+                                 <td><a href="/cashbook/deleteReceitAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 삭제</a></td>
+                               
+                            </div>
+                        </td>
+                          <% }  %>
+                    </tr>
+                <% 
+                  
+                } %>
             </tbody>
         </table>
-        
-        <% 
-			 int cashNum  = 0; 
-             if ( request.getParameter("cashNo")!= null){
-            	cashNum =  Integer.valueOf(request.getParameter("cashNo"));
-             }
-        	 ReceitDao receitDao = new ReceitDao();
-        	 Receit receit =  receitDao.selectReceitOne(cashNum);
-        %>
     </div>
 </div>
-  <% if (receit == null) { %>
-  <p>영수증이 등록되지 않았습니다. </p>
-  
-  <%   } else { %>
-	<div>이미지: <img src="/cashbook/upload/<%=receit.getFileName()%>"></div>
-
-	<% } %>
 </body>
 </html>

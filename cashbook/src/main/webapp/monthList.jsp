@@ -84,6 +84,7 @@
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link active" href="#">홈</a></li>
+          <li class="nav-item"><a class="nav-link" href="/cashbook/statisticsList.jsp">수입지출 통계자료</a></li>
         <li class="nav-item"><a class="nav-link" href="/cashbook/categoryList.jsp">카테고리 목록</a></li>
         <li class="nav-item"><a class="nav-link" href="/cashbook/updateAdminPwForm.jsp">비밀번호 수정</a></li>
         <li class="nav-item"><a class="nav-link text-danger" href="/cashbook/logout.jsp">로그아웃</a></li>
