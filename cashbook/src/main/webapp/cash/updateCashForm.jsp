@@ -1,21 +1,29 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import = "dto.*" %>
 <%@ page import = "model.*" %>
 <%@ page import = "java.util.*" %>
-<%
-	if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-	    response.sendRedirect("/cashbook/logout.jsp");
-	    return; 
-	}
 
-	String cashDate = request.getParameter("cashDate");
-	ArrayList<Category> list = new ArrayList<Category>();
-	String kind = request.getParameter("kind");
+<% 
+    if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
+        response.sendRedirect("/cashbook/cash/logout.jsp");
+        return; 
+    }
+%>
+
+<%
+	int cashNo = Integer.valueOf(request.getParameter("cashNo")); 
+    CashDao cashDao = new CashDao();
+    ArrayList<HashMap<String,Object>> list =   cashDao.selectCashOne(cashNo) ; 
+    String kind = request.getParameter("kind");
+    ArrayList<Category> list2 = new ArrayList<Category>();
 	if(kind != null) {
 		CategoryDao categoryDao = new CategoryDao();
-		list = categoryDao.selectCategoryListByKind(kind);
+		 list2 = categoryDao.selectCategoryListByKind(kind);
 	}
+    
+	System.out.println("list2:"+ list2);
 %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -42,13 +50,14 @@
     </style>
 </head>
 <body>
+<%   for ( HashMap<String,Object> map : list ){  %>
 <div class="container d-flex align-items-center justify-content-center form-container">
     <div class="card form-card p-4">
-        <h3 class="text-center mb-4 fw-bold">수입/지출 입력</h3>
+        <h3 class="text-center mb-4 fw-bold">수입/지출 수정</h3>
 
         <!-- 수입/지출 종류 선택 -->
-        <form method="post" action="/cashbook/insertCashForm.jsp" class="mb-4">
-            <input type="hidden" name="cashDate" value="<%=cashDate%>">
+        <form method="post" action="/cashbook/cash/updateCashForm.jsp?cashNo=<%=cashNo%>" class="mb-4">
+            <input type="hidden" name="cashDate" value="<%=map.get("cashDate")%>">
             <div class="mb-3">
                 <label for="kind" class="form-label">종류 선택</label>
                 <select class="form-select" name="kind" id="kind">
@@ -63,34 +72,50 @@
         </form>
 
         <!-- cash 입력 폼 -->
-        <form action="/cashbook/insertCashAction.jsp" method="post">
+        <form action="/cashbook/cash/updateCashAction.jsp?cashNo=<%=cashNo%> " method="post" >
             <div class="mb-3">
                 <label class="form-label">날짜</label>
-                <input type="text" class="form-control" name="cashDate" value="<%=cashDate%>" readonly>
+                <input type="text" class="form-control" name="cashDate" value="<%=map.get("cashDate")%>" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label">카테고리</label>
-                <select class="form-select" name="categoryNo">
-                    <% if(list != null){ for(Category c : list){ %>
-                        <option value="<%=c.getNum()%>"><%=c.getTitle()%></option>
-                    <% }} %>
+                <select class="form-select" name="categoryNo" >
+                <% 
+                		if(list2 !=  null  ){   
+                		for(Category c : list2){
+                		 	
+                %>
+                
+                	
+                     
+                	<option value="<%=c.getNum()%>"  selected><%=c.getTitle()%></option>
+	<%
+                }
+            }
+             %>
+             	<% if(list2== null  ||  list2.isEmpty()){ %>
+				<option value="<%=map.get("categoryNo")%>"  selected><%=map.get("title")%></option>
+				<% } %>
                 </select>
             </div>
             <div class="mb-3">
                 <label class="form-label">금액</label>
-                <input type="number" class="form-control" name="amount" required>
+                <input type="number" class="form-control" name="amount"  value="<%=map.get("amount")%>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">메모</label>
-                <textarea class="form-control" name="memo" rows="3"></textarea>
+                <textarea class="form-control" name="memo" rows="3" ><%=map.get("memo")%></textarea>
             </div>
             <div class="mb-4">
                 <label class="form-label">색상 선택</label>
-                <input type="color" class="form-control form-control-color" name="color">
+                <input type="color" class="form-control form-control-color" name="color" value ="<%=map.get("color")%>">
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">수입/지출 등록</button>
             </div>
+          <%
+          }
+			%>
         </form>
     </div>
 </div>

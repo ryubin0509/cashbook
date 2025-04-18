@@ -8,6 +8,13 @@
 <%@ page import = "model.*" %>
 <%@ page import = "java.nio.*" %>
 <%
+	if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
+    	response.sendRedirect("/cashbook/login/logout.jsp");
+    	return;
+}
+%> 
+
+<%
 int cashNum = Integer.valueOf(request.getParameter("cashNo"));
 String cashDate = request.getParameter("cashDate");
 

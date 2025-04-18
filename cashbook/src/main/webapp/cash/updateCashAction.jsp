@@ -3,6 +3,7 @@
 <%@ page import = "model.*" %>
 
 
+
 <%
 	 int cashNum =  Integer.valueOf(request.getParameter("cashNo"));
 	 String cashDate = request.getParameter("cashDate");

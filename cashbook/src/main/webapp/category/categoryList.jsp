@@ -4,7 +4,7 @@
 <%@ page import="java.util.*" %>
 <%
     if (session.getAttribute("id") == null && session.getAttribute("pw") == null) {
-        response.sendRedirect("/cashbook/logout.jsp");
+        response.sendRedirect("/cashbook/login/logout.jsp");
         return;
     }
 
@@ -73,13 +73,13 @@
           <a class="nav-link <%=request.getRequestURI().contains("index.jsp") ? "active" : ""%>" href="/cashbook/index.jsp">홈</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%=request.getRequestURI().contains("categoryList") ? "active" : ""%>" href="/cashbook/categoryList.jsp">카테고리 목록</a>
+          <a class="nav-link <%=request.getRequestURI().contains("categoryList") ? "active" : ""%>" href="/cashbook/category/categoryList.jsp">카테고리 목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%=request.getRequestURI().contains("updateAdminPwForm") ? "active" : ""%>" href="/cashbook/updateAdminPwForm.jsp">비밀번호 수정</a>
+          <a class="nav-link <%=request.getRequestURI().contains("updateAdminPwForm") ? "active" : ""%>" href="/cashbook/login/updateAdminPwForm.jsp">비밀번호 수정</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-danger" href="/cashbook/logout.jsp">로그아웃</a>
+          <a class="nav-link text-danger" href="/cashbook/login/logout.jsp">로그아웃</a>
         </li>
       </ul>
     </div>
@@ -109,8 +109,8 @@
                         <td><%= map.get("num") %></td>
                         <td><%= map.get("kind") %></td>
                         <td><%= map.get("title") %></td>
-                        <td><a href="/cashbook/updateCategoryTitleForm.jsp?num=<%=map.get("num")%>">수정</a></td>
-                        <td><a href="/cashbook/deleteCategoryAction.jsp?num=<%=map.get("num")%>">삭제</a></td>
+                        <td><a href="/cashbook/category/updateCategoryTitleForm.jsp?num=<%=map.get("num")%>">수정</a></td>
+                        <td><a href="/cashbook/category/deleteCategoryAction.jsp?num=<%=map.get("num")%>">삭제</a></td>
                     </tr>
                 <% } %>
             </tbody>
@@ -120,13 +120,13 @@
         <div class="d-flex justify-content-center mt-3">
             <div class="pagination">
                 <% if(currentPage > 1) { %>
-                    <a href="/cashbook/categoryList.jsp?currentPage=<%= currentPage - 1 %>" class="btn btn-outline-secondary btn-sm">이전</a>
+                    <a href="/cashbook/category/categoryList.jsp?currentPage=<%= currentPage - 1 %>" class="btn btn-outline-secondary btn-sm">이전</a>
                 <% } %>
 
                 <span class="mx-2 fw-bold"><%= currentPage %> / <%=lastPage%></span>
 
                 <% if(currentPage < lastPage) { %>
-                    <a href="/cashbook/categoryList.jsp?currentPage=<%= currentPage + 1 %>" class="btn btn-outline-secondary btn-sm">다음</a>
+                    <a href="/cashbook/category/categoryList.jsp?currentPage=<%= currentPage + 1 %>" class="btn btn-outline-secondary btn-sm">다음</a>
                 <% } %>
             </div>
         </div>

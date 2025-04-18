@@ -6,7 +6,7 @@
 
 <%
 	if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-    response.sendRedirect("/cashbook/logout.jsp");
+    response.sendRedirect("/cashbook/login/logout.jsp");
     return;
 }
 
@@ -28,7 +28,7 @@
 	AdminDao admindao = new AdminDao();
 	admindao.updateAdmin(map); // 비밀번호 변경 
 	
-	response.sendRedirect("/cashbook/loginForm.jsp"); 
+	response.sendRedirect("/cashbook/login/loginForm.jsp"); 
 
 	
 %>

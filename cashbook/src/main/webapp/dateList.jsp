@@ -5,7 +5,7 @@
 <%@ page import = "java.util.*" %>
 <%
     if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-        response.sendRedirect("/cashbook/logout.jsp");
+        response.sendRedirect("/cashbook/login/logout.jsp");
         return; 
     }
 
@@ -59,10 +59,10 @@
           <a class="nav-link <%=request.getRequestURI().contains("categoryList") ? "active" : ""%>" href="/cashbook/monthList.jsp">달력 목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%=request.getRequestURI().contains("updateAdminPwForm") ? "active" : ""%>" href="/cashbook/updateAdminPwForm.jsp">비밀번호 수정</a>
+          <a class="nav-link <%=request.getRequestURI().contains("updateAdminPwForm") ? "active" : ""%>" href="/cashbook/login/updateAdminPwForm.jsp">비밀번호 수정</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-danger" href="/cashbook/logout.jsp">로그아웃</a>
+          <a class="nav-link text-danger" href="/cashbook/login/logout.jsp">로그아웃</a>
         </li>
       </ul>
     </div>
@@ -103,9 +103,9 @@
                     <td><%=map.get("title") %></td>
                     <td><%=map.get("amount") %></td>
                     <td><%=map.get("memo") %></td>
-                    <td><a href="/cashbook/updateCashForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">수정</a></td>
-                    <td><a href="/cashbook/deleteCashAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">삭제</a></td>
-                    <td><a href="/cashbook/insertReceitForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 등록하기</a></td>
+                    <td><a href="/cashbook/cash/updateCashForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">수정</a></td>
+                    <td><a href="/cashbook/cash/deleteCashAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">삭제</a></td>
+                    <td><a href="/cashbook/Receit/insertReceitForm.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 등록하기</a></td>
                     <td> <% if(fileName != null) {    %> ✅
                     <% } else { %>
                         ❌
@@ -120,7 +120,7 @@
                               
                                 <img src="/cashbook/upload/<%= fileName %>" class="img-fluid" alt="영수증 이미지">
                              
-                                 <td><a href="/cashbook/deleteReceitAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 삭제</a></td>
+                                 <td><a href="/cashbook/Receit/deleteReceitAction.jsp?cashNo=<%=map.get("cashNo")%>&cashDate=<%=cashDate%>">영수증 삭제</a></td>
                                
                             </div>
                         </td>

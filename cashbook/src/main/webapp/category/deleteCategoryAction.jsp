@@ -6,6 +6,6 @@
 	CategoryDao categoryDao = new CategoryDao( );
 	categoryDao.deleteOne(num);
 	
-	response.sendRedirect("/cashbook/categoryList.jsp");
+	response.sendRedirect("/cashbook/category/categoryList.jsp");
 	
  %>

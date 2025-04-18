@@ -3,36 +3,26 @@
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%
-    int currentPage = 1;
-	int rowPerPage = 10;
-	if(request.getParameter("currentPage") != null){
-		currentPage = Integer.valueOf(request.getParameter("currentPage"));
-	}
-	int total = 0; // 전체 페이지수  
-	Paging p = new Paging();
-	p.setCurrentPage(currentPage);
-	p.setRowPerPage(rowPerPage);
 
-	
-	StatisticsDao statisticsDao = new StatisticsDao();
-	total = statisticsDao.selectMonthTotalList();
-	int lastPage = p.getlastPage(total); // 마지막 페이지구함.
-	int beginRow =  p.getBeginRow(); 
-	 
-	ArrayList<Statistics> list = new ArrayList<Statistics>(); 
-    list = statisticsDao.selectMonth(beginRow, rowPerPage);
-  
-    System.out.println("total: "+ total);
-    System.out.println("lastPage :" +lastPage);
-    
+<% 
+    if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
+        response.sendRedirect("/cashbook/login/logout.jsp");
+        return; 
+    }
+%>
+
+
+<%
+    ArrayList<Statistics> list = new ArrayList<Statistics>(); 
+    StatisticsDao statisticsDao = new StatisticsDao();
+    list = statisticsDao.selectYearTotal();
 %>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>전체 통계자료 리스트</title>
+    <title>년도별 통계리스트  </title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -80,14 +70,14 @@
             전체 통계자료
           </a>
           <ul class="dropdown-menu" aria-labelledby="statisticsDropdown">
-            <li><a class="dropdown-item" href="/cashbook/statisticsList.jsp">전체 통계자료</a></li>
-            <li><a class="dropdown-item" href="/cashbook/statisticsByYear.jsp">년별 통계</a></li>
-            <li><a class="dropdown-item" href="/cashbook/statisticsByMonth.jsp">월별 통계</a></li>
+            <li><a class="dropdown-item" href="/cashbook/statistic/statisticsList.jsp">전체 통계자료</a></li>
+            <li><a class="dropdown-item" href="/cashbook/statistic/statisticsByYear.jsp">년별 통계</a></li>
+            <li><a class="dropdown-item" href="/cashbook/statistic/statisticsByMonth.jsp">월별 통계</a></li>
           </ul>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/cashbook/logout.jsp">로그아웃</a>
+          <a class="nav-link" href="/cashbook/login/logout.jsp">로그아웃</a>
         </li>
       </ul>
     </div>
@@ -97,13 +87,12 @@
 <!-- ✅ 메인 콘텐츠 -->
 <div class="container">
     <div class="main-card">
-        <h3 class="text-center fw-bold mb-4">년 월별 통계리스트</h3>
+        <h3 class="text-center fw-bold mb-4">년도별 통계리스트</h3>
 
         <table class="table table-hover text-center">
             <thead class="table-light">
                 <tr>
-                	<th>년도</th>
-                	<th>월</th>
+                	<th>년도		</th>
                     <th>수입/지출</th>    
                     <th>총 횟수</th>
                     <th>금액</th>
@@ -113,7 +102,6 @@
                 <% for(Statistics s : list) { %>
                     <tr>
                     	<td><%=s.getCashDate() %></td>
-                    	<td><%=s.getCashMonth() %></td>
                         <td><%= s.getKind() %></td>
                         <td><%= s.getCount() %></td>
                         <td><%= s.getAmount() %></td>
@@ -121,19 +109,10 @@
                 <% } %>
             </tbody>
         </table>
-        
     </div>
 </div>
 
-<div class="d-flex justify-content-center mt-4 gap-3">
-    <% if(currentPage > 1){ %> 
-        <a class="btn btn-outline-secondary" href="/cashbook/statisticsByMonth.jsp?currentPage=<%=currentPage-1 %>">이전</a>
-    <% } %>
 
-    <% if(currentPage < lastPage) {%>
-        <a class="btn btn-outline-secondary" href="/cashbook/statisticsByMonth.jsp?currentPage=<%=currentPage+1 %>">다음</a> 
-    <% } %>
-</div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const dropdown = document.getElementById("dropdownContainer");
@@ -141,16 +120,16 @@
     let clickTimer;
 
     toggle.addEventListener("click", function (e) {
-      // 기본 이동 막기 (드롭다운 항목 클릭이 아니라 토글일 때만)
+     
       e.preventDefault();
 
-      // show 상태면 다시 클릭해도 무시
+    
       if (dropdown.classList.contains("show")) return;
 
-      // 드롭다운 열기
+     
       dropdown.classList.add("show");
 
-      // 3초 후 자동 닫기
+   
       clearTimeout(clickTimer);
       clickTimer = setTimeout(() => {
         dropdown.classList.remove("show");

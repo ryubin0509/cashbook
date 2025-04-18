@@ -3,7 +3,7 @@
 <%@ page import = "dto.*" %>
 <% 
     if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-        response.sendRedirect("/cashbook/logout.jsp");
+        response.sendRedirect("/cashbook/login/logout.jsp");
         return; 
     }
 %>

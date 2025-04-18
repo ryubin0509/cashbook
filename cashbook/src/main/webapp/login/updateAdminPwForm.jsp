@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-        response.sendRedirect("/cashbook/logout.jsp");
+        response.sendRedirect("/cashbook/login/logout.jsp");
         return;
     }
 %>
@@ -36,7 +36,7 @@
     <div class="container d-flex align-items-center justify-content-center edit-container">
         <div class="card edit-card p-4">
             <h3 class="text-center mb-4 fw-bold">비밀번호 수정</h3>
-            <form action="/cashbook/updateAdminAction.jsp" method="post">
+            <form action="/cashbook/login/updateAdminAction.jsp" method="post">
                 <div class="mb-3">
                     <label for="currentPw" class="form-label">현재 비밀번호</label>
                     <input type="password" class="form-control" id="currentPw" name="currentPw" placeholder="현재 비밀번호 입력" required>

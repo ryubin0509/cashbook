@@ -3,7 +3,7 @@
 <%@ page import ="model.*" %>
 <%
 	if (session.getAttribute("id") == null && session.getAttribute("pw") == null ) {
-    	response.sendRedirect("/cashbook/logout.jsp");
+    	response.sendRedirect("/cashbook/login/logout.jsp");
     	return;
 }
 %> 
@@ -21,7 +21,7 @@
 	 
 	categoryDao.insertCategory(c); //  카테고리 추가 완료
 	
-	response.sendRedirect("/cashbook/categoryList.jsp");
+	response.sendRedirect("/cashbook/category/categoryList.jsp");
 	
 	
 	
